@@ -198,13 +198,11 @@ export default function ServiceProjectShowcase() {
                   key={src}
                   className="relative overflow-hidden rounded-xl bg-gray-700 aspect-square group"
                 >
-                  <Lens zoomFactor={1.3} lensSize={150} lensColor="rgba(0,0,0,0.3)">
-                    <img
-                      src={src}
-                      alt={`${active.label} project ${idx + 1}`}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </Lens>
+                  <img
+                    src={src}
+                    alt={`${active.label} project ${idx + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                   <BorderBeam
                     size={60}
                     duration={4}

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { GalleryItem } from "@/data/gallery";
 import { MapPin } from "lucide-react";
 import { MagicCard } from "@/components/ui/magic-card";
-import { Lens } from "@/components/ui/lens";
 import { BorderBeam } from "@/components/ui/border-beam";
 
 interface GalleryGridProps {
@@ -68,18 +67,16 @@ export default function GalleryGrid({ items, onImageClick }: GalleryGridProps) {
               borderWidth={2}
               className="rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
             />
-            {/* Image with Lens effect */}
-            <div className="absolute inset-0">
-              <Lens zoomFactor={1.4} lensSize={180} lensColor="rgba(0,0,0,0.3)">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  loading="lazy"
-                />
-              </Lens>
+            {/* Image */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                loading="lazy"
+              />
             </div>
 
             {/* Gradient overlay - always visible on mobile for tap, hover on desktop */}

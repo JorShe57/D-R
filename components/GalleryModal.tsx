@@ -6,7 +6,6 @@ import { X, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { GalleryItem } from "@/data/gallery";
 import { Particles } from "@/components/ui/particles";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { Lens } from "@/components/ui/lens";
 
 interface GalleryModalProps {
   items: GalleryItem[];
@@ -157,16 +156,14 @@ export default function GalleryModal({
             borderWidth={3}
             className="rounded-xl"
           />
-          <Lens zoomFactor={1.3} lensSize={200} lensColor="rgba(0,0,0,0.4)">
-            <Image
-              src={currentItem.src}
-              alt={currentItem.alt}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
-              priority
-            />
-          </Lens>
+          <Image
+            src={currentItem.src}
+            alt={currentItem.alt}
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
+            priority
+          />
         </div>
 
         {/* Caption */}

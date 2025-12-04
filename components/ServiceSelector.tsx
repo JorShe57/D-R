@@ -21,7 +21,6 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { AnimatedBeam } from "@/components/ui/animated-beam";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { Lens } from "@/components/ui/lens";
 
 interface ServiceData {
   id: string;
@@ -240,16 +239,14 @@ export default function ServiceSelector() {
         <div className="grid md:grid-cols-2 gap-0">
           {/* Image Side */}
           <div ref={imageRef} className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px] lg:min-h-[500px]">
-            <Lens zoomFactor={1.5} lensSize={200} lensColor="rgba(0,0,0,0.5)">
-              <Image
-                src={selectedService.image}
-                alt={`${selectedService.title} project example`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-            </Lens>
+            <Image
+              src={selectedService.image}
+              alt={`${selectedService.title} project example`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-black/10 pointer-events-none" />
             
             {/* Mobile Overlay Title */}
