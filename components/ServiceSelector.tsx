@@ -18,6 +18,10 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { AnimatedBeam } from "@/components/ui/animated-beam";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { Lens } from "@/components/ui/lens";
 
 interface ServiceData {
   id: string;
@@ -123,6 +127,9 @@ export default function ServiceSelector() {
   const [activeService, setActiveService] = useState<string>("driveways");
   const tabsRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const selectedService = services.find((s) => s.id === activeService)!;
   const Icon = selectedService.icon;
@@ -181,9 +188,9 @@ export default function ServiceSelector() {
               id={`tab-${service.id}`}
               onClick={() => setActiveService(service.id)}
               className={`
-                flex-shrink-0 snap-center flex items-center gap-2 px-4 py-3 md:px-6 md:py-3.5
+                relative flex-shrink-0 snap-center flex items-center gap-2 px-4 py-3 md:px-6 md:py-3.5
                 rounded-full font-heading text-sm md:text-base font-semibold
-                transition-all duration-300 ease-out
+                transition-all duration-300 ease-out overflow-hidden
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2
                 ${
                   isActive
@@ -192,8 +199,18 @@ export default function ServiceSelector() {
                 }
               `}
             >
-              <TabIcon className={`w-4 h-4 md:w-5 md:h-5 ${isActive ? "text-brand-yellow" : ""}`} />
-              <span className="whitespace-nowrap">{service.title}</span>
+              {isActive && (
+                <BorderBeam
+                  size={80}
+                  duration={3}
+                  colorFrom="#FFD700"
+                  colorTo="#FFA500"
+                  borderWidth={2}
+                  className="rounded-full"
+                />
+              )}
+              <TabIcon className={`w-4 h-4 md:w-5 md:h-5 relative z-10 ${isActive ? "text-brand-yellow" : ""}`} />
+              <span className="whitespace-nowrap relative z-10">{service.title}</span>
             </button>
           );
         })}
@@ -201,23 +218,39 @@ export default function ServiceSelector() {
 
       {/* Service Detail Panel */}
       <div
+        ref={containerRef}
         id={`panel-${selectedService.id}`}
         role="tabpanel"
         aria-labelledby={`tab-${selectedService.id}`}
-        className="bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden"
+        className="relative bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden"
       >
+        {/* Animated Beam from active tab to content */}
+        {activeTabRef.current && containerRef.current && (
+          <AnimatedBeam
+            containerRef={containerRef}
+            fromRef={activeTabRef}
+            toRef={contentRef}
+            curvature={50}
+            gradientStartColor="#FFD700"
+            gradientStopColor="#FFA500"
+            duration={3}
+            className="hidden md:block"
+          />
+        )}
         <div className="grid md:grid-cols-2 gap-0">
           {/* Image Side */}
-          <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px] lg:min-h-[500px]">
-            <Image
-              src={selectedService.image}
-              alt={`${selectedService.title} project example`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-black/10" />
+          <div ref={imageRef} className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px] lg:min-h-[500px]">
+            <Lens zoomFactor={1.5} lensSize={200} lensColor="rgba(0,0,0,0.5)">
+              <Image
+                src={selectedService.image}
+                alt={`${selectedService.title} project example`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+            </Lens>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-black/10 pointer-events-none" />
             
             {/* Mobile Overlay Title */}
             <div className="absolute bottom-4 left-4 right-4 md:hidden">
@@ -233,7 +266,7 @@ export default function ServiceSelector() {
           </div>
 
           {/* Content Side */}
-          <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center">
+          <div ref={contentRef} className="p-6 md:p-10 lg:p-12 flex flex-col justify-center">
             {/* Desktop Title */}
             <div className="hidden md:flex items-center gap-4 mb-6">
               <div className="flex items-center justify-center w-16 h-16 bg-brand-slate rounded-2xl shadow-lg">
@@ -245,13 +278,26 @@ export default function ServiceSelector() {
             </div>
 
             {/* Description */}
-            <p className="font-body text-gray-600 text-base md:text-lg leading-relaxed mb-6 md:mb-8">
+            <TextAnimate
+              by="word"
+              animation="fadeIn"
+              delay={0.1}
+              className="font-body text-gray-600 text-base md:text-lg leading-relaxed mb-6 md:mb-8"
+            >
               {selectedService.description}
-            </p>
+            </TextAnimate>
 
             {/* Bullet Points */}
             <div className="grid gap-3 mb-8">
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl overflow-hidden">
+                <BorderBeam
+                  size={60}
+                  duration={4}
+                  colorFrom="#FFD700"
+                  colorTo="#FFA500"
+                  borderWidth={1}
+                  className="rounded-xl opacity-0 hover:opacity-100 transition-opacity"
+                />
                 <div className="flex items-center justify-center w-10 h-10 bg-brand-yellow/20 rounded-lg">
                   <Clock className="w-5 h-5 text-brand-slate" />
                 </div>
@@ -265,7 +311,15 @@ export default function ServiceSelector() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl overflow-hidden">
+                <BorderBeam
+                  size={60}
+                  duration={4}
+                  colorFrom="#FFD700"
+                  colorTo="#FFA500"
+                  borderWidth={1}
+                  className="rounded-xl opacity-0 hover:opacity-100 transition-opacity"
+                />
                 <div className="flex items-center justify-center w-10 h-10 bg-brand-yellow/20 rounded-lg">
                   <CheckCircle2 className="w-5 h-5 text-brand-slate" />
                 </div>
@@ -279,7 +333,15 @@ export default function ServiceSelector() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl overflow-hidden">
+                <BorderBeam
+                  size={60}
+                  duration={4}
+                  colorFrom="#FFD700"
+                  colorTo="#FFA500"
+                  borderWidth={1}
+                  className="rounded-xl opacity-0 hover:opacity-100 transition-opacity"
+                />
                 <div className="flex items-center justify-center w-10 h-10 bg-brand-yellow/20 rounded-lg">
                   <Building2 className="w-5 h-5 text-brand-slate" />
                 </div>

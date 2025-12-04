@@ -5,7 +5,6 @@ import Image from "next/image";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import ServiceProjectShowcase from "@/components/ServiceProjectShowcase";
 import { TextAnimate } from "@/components/ui/text-animate";
-import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { Particles } from "@/components/ui/particles";
 import { Meteors } from "@/components/ui/meteors";
@@ -57,30 +56,17 @@ export default function Home() {
               by="word"
               animation="blurInUp"
               delay={0.2}
-              className="block mb-2"
+              className="block mb-2 text-brand-yellow"
             >
-              <AnimatedGradientText
-                colorFrom="#FFD700"
-                colorTo="#FFA500"
-                className="text-4xl sm:text-5xl md:text-7xl font-bold"
-              >
-                Premium Concrete
-              </AnimatedGradientText>
+              Premium Concrete
             </TextAnimate>
-            <TextAnimate
-              by="word"
-              animation="blurInUp"
-              delay={0.4}
-              className="block"
+            <SparklesText
+              sparklesCount={8}
+              colors={{ first: "#FFD700", second: "#FFA500" }}
+              className="block text-3xl sm:text-4xl md:text-6xl font-bold"
             >
-              <SparklesText
-                sparklesCount={8}
-                colors={{ first: "#FFD700", second: "#FFA500" }}
-                className="text-3xl sm:text-4xl md:text-6xl font-bold"
-              >
-                Restoration & Design
-              </SparklesText>
-            </TextAnimate>
+              Restoration & Design
+            </SparklesText>
           </h1>
           <TextAnimate
             by="word"

@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { MagicCard } from "@/components/ui/magic-card";
+import { AnimatedBeam } from "@/components/ui/animated-beam";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { Lens } from "@/components/ui/lens";
 
 type Category = {
   id: string;
@@ -63,6 +67,9 @@ const CATEGORIES: Category[] = [
 export default function ServiceProjectShowcase() {
   const [activeId, setActiveId] = useState<string>(CATEGORIES[0].id);
   const active = CATEGORIES.find((c) => c.id === activeId)!;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLButtonElement | null>(null);
+  const serviceCardRef = useRef<HTMLDivElement>(null);
 
   return (
     <section className="bg-gray-600 py-12 md:py-16 px-4 sm:px-6 lg:px-10">
@@ -83,39 +90,85 @@ export default function ServiceProjectShowcase() {
 
         {/* Tabs */}
         <div className="flex flex-wrap justify-center gap-3 mb-8">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setActiveId(cat.id)}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition font-heading
-                ${
-                  activeId === cat.id
-                    ? "bg-brand-yellow text-brand-slate border-brand-yellow shadow"
-                    : "border-gray-400 text-gray-100 hover:border-brand-yellow hover:text-white"
-                }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const isActive = activeId === cat.id;
+            return (
+              <button
+                key={cat.id}
+                ref={isActive ? activeTabRef : null}
+                type="button"
+                onClick={() => setActiveId(cat.id)}
+                className={`relative rounded-full border px-4 py-2 text-sm font-medium transition font-heading overflow-hidden
+                  ${
+                    isActive
+                      ? "bg-brand-yellow text-brand-slate border-brand-yellow shadow"
+                      : "border-gray-400 text-gray-100 hover:border-brand-yellow hover:text-white"
+                  }`}
+              >
+                {isActive && (
+                  <BorderBeam
+                    size={80}
+                    duration={3}
+                    colorFrom="#FFD700"
+                    colorTo="#FFA500"
+                    borderWidth={2}
+                    className="rounded-full"
+                  />
+                )}
+                <span className="relative z-10">{cat.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Content */}
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)] items-start">
+        <div ref={containerRef} className="relative grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)] items-start">
+          {/* Animated Beam from active tab to service card */}
+          {activeTabRef.current && serviceCardRef.current && containerRef.current && (
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={activeTabRef}
+              toRef={serviceCardRef}
+              curvature={30}
+              gradientStartColor="#FFD700"
+              gradientStopColor="#FFA500"
+              duration={3}
+              className="hidden lg:block"
+            />
+          )}
           {/* Service card */}
-          <div className="bg-brand-slate/90 rounded-2xl p-6 shadow-lg border border-gray-500">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-yellow mb-2 font-body">
+          <div ref={serviceCardRef}>
+            <MagicCard
+              className="bg-brand-slate/90 rounded-2xl p-6 shadow-lg border border-gray-500"
+              gradientFrom="#FFD700"
+              gradientTo="#FFA500"
+              gradientSize={200}
+            >
+            <BorderBeam
+              size={100}
+              duration={5}
+              colorFrom="#FFD700"
+              colorTo="#FFA500"
+              borderWidth={2}
+              className="rounded-2xl"
+            />
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-yellow mb-2 font-body relative z-10">
               Service
             </p>
-            <h3 className="text-2xl font-semibold text-white mb-3 font-heading">
+            <h3 className="text-2xl font-semibold text-white mb-3 font-heading relative z-10">
               {active.serviceTitle}
             </h3>
-            <p className="text-gray-100 text-sm mb-6 font-body">
+            <TextAnimate
+              by="word"
+              animation="fadeIn"
+              delay={0.1}
+              className="text-gray-100 text-sm mb-6 font-body relative z-10"
+            >
               {active.serviceBlurb}
-            </p>
+            </TextAnimate>
             <Link
               href="/contact"
-              className="relative inline-flex items-center justify-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-semibold text-brand-slate shadow hover:bg-yellow-400 transition font-heading overflow-hidden"
+              className="relative inline-flex items-center justify-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-semibold text-brand-slate shadow hover:bg-yellow-400 transition font-heading overflow-hidden relative z-10"
             >
               <BorderBeam
                 size={80}
@@ -127,10 +180,11 @@ export default function ServiceProjectShowcase() {
               />
               <span className="relative z-10">{active.cta}</span>
             </Link>
-            <p className="mt-4 text-xs text-gray-300 font-body">
+            <p className="mt-4 text-xs text-gray-300 font-body relative z-10">
               Free estimates • Licensed &amp; insured • Residential &amp;
               commercial
             </p>
+          </MagicCard>
           </div>
 
           {/* Project images */}
@@ -144,10 +198,20 @@ export default function ServiceProjectShowcase() {
                   key={src}
                   className="relative overflow-hidden rounded-xl bg-gray-700 aspect-square group"
                 >
-                  <img
-                    src={src}
-                    alt={`${active.label} project ${idx + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  <Lens zoomFactor={1.3} lensSize={150} lensColor="rgba(0,0,0,0.3)">
+                    <img
+                      src={src}
+                      alt={`${active.label} project ${idx + 1}`}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </Lens>
+                  <BorderBeam
+                    size={60}
+                    duration={4}
+                    colorFrom="#FFD700"
+                    colorTo="#FFA500"
+                    borderWidth={1}
+                    className="rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
                   />
                 </div>
               ))}

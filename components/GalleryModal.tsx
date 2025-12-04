@@ -4,6 +4,9 @@ import { useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { GalleryItem } from "@/data/gallery";
+import { Particles } from "@/components/ui/particles";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { Lens } from "@/components/ui/lens";
 
 interface GalleryModalProps {
   items: GalleryItem[];
@@ -87,7 +90,15 @@ export default function GalleryModal({
         className="absolute inset-0 bg-black/95 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
-      />
+      >
+        {/* Particles Background */}
+        <Particles
+          quantity={20}
+          className="opacity-20"
+          color="#FFD700"
+          size={0.4}
+        />
+      </div>
 
       {/* Close button */}
       <button
@@ -138,14 +149,24 @@ export default function GalleryModal({
       >
         {/* Image container */}
         <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-xl overflow-hidden shadow-2xl bg-black/50">
-          <Image
-            src={currentItem.src}
-            alt={currentItem.alt}
-            fill
-            className="object-contain"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
-            priority
+          <BorderBeam
+            size={120}
+            duration={6}
+            colorFrom="#FFD700"
+            colorTo="#FFA500"
+            borderWidth={3}
+            className="rounded-xl"
           />
+          <Lens zoomFactor={1.3} lensSize={200} lensColor="rgba(0,0,0,0.4)">
+            <Image
+              src={currentItem.src}
+              alt={currentItem.alt}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
+              priority
+            />
+          </Lens>
         </div>
 
         {/* Caption */}
