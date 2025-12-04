@@ -17,6 +17,7 @@ import {
   ChevronRight,
   LucideIcon,
 } from "lucide-react";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 interface ServiceData {
   id: string;
@@ -297,16 +298,32 @@ export default function ServiceSelector() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 bg-brand-yellow text-brand-slate px-6 py-4 rounded-xl font-heading font-bold text-base hover:bg-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2"
+                className="relative inline-flex items-center justify-center gap-2 bg-brand-yellow text-brand-slate px-6 py-4 rounded-xl font-heading font-bold text-base hover:bg-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 overflow-hidden"
               >
-                Get Free Estimate
-                <ChevronRight className="w-5 h-5" />
+                <BorderBeam
+                  size={100}
+                  duration={4}
+                  colorFrom="#FFD700"
+                  colorTo="#FFFFFF"
+                  borderWidth={2}
+                  className="rounded-xl"
+                />
+                <span className="relative z-10">Get Free Estimate</span>
+                <ChevronRight className="w-5 h-5 relative z-10" />
               </Link>
               <Link
                 href="/gallery"
-                className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-slate px-6 py-4 rounded-xl font-heading font-bold text-base border-2 border-brand-slate hover:bg-brand-slate hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-slate focus-visible:ring-offset-2"
+                className="relative inline-flex items-center justify-center gap-2 bg-transparent text-brand-slate px-6 py-4 rounded-xl font-heading font-bold text-base border-2 border-brand-slate hover:bg-brand-slate hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-slate focus-visible:ring-offset-2 overflow-hidden"
               >
-                View Examples
+                <BorderBeam
+                  size={100}
+                  duration={5}
+                  colorFrom="#2F4F4F"
+                  colorTo="#FFD700"
+                  borderWidth={2}
+                  className="rounded-xl"
+                />
+                <span className="relative z-10">View Examples</span>
               </Link>
             </div>
           </div>
@@ -315,4 +332,5 @@ export default function ServiceSelector() {
     </section>
   );
 }
+
 

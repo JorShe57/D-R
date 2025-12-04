@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 type Category = {
   id: string;
@@ -114,9 +115,17 @@ export default function ServiceProjectShowcase() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-semibold text-brand-slate shadow hover:bg-yellow-400 transition font-heading"
+              className="relative inline-flex items-center justify-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-semibold text-brand-slate shadow hover:bg-yellow-400 transition font-heading overflow-hidden"
             >
-              {active.cta}
+              <BorderBeam
+                size={80}
+                duration={4}
+                colorFrom="#FFD700"
+                colorTo="#FFFFFF"
+                borderWidth={2}
+                className="rounded-full"
+              />
+              <span className="relative z-10">{active.cta}</span>
             </Link>
             <p className="mt-4 text-xs text-gray-300 font-body">
               Free estimates • Licensed &amp; insured • Residential &amp;

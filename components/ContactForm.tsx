@@ -1,7 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Confetti, ConfettiRef } from "@/components/ui/confetti";
+import { CoolMode } from "@/components/ui/cool-mode";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { AnimatedList } from "@/components/ui/animated-list";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 interface FormData {
   name: string;
@@ -17,6 +22,7 @@ interface SubmitStatus {
 }
 
 export default function ContactForm() {
+  const confettiRef = useRef<ConfettiRef>(null);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -52,6 +58,15 @@ export default function ContactForm() {
         type: "success",
         message: "Thank you! We've received your message and will get back to you within 1 business day.",
       });
+      // Trigger confetti on success
+      if (confettiRef.current) {
+        confettiRef.current.fire({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ["#FFD700", "#FFA500", "#FFFFFF"],
+        });
+      }
       setFormData({
         name: "",
         email: "",
@@ -76,7 +91,9 @@ export default function ContactForm() {
   ];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <>
+      <Confetti ref={confettiRef} manualstart className="fixed inset-0 pointer-events-none z-50" />
+      <form onSubmit={handleSubmit} className="space-y-5 relative" noValidate>
       {/* Name Field */}
       <div className="space-y-1.5">
         <label
@@ -234,21 +251,31 @@ export default function ContactForm() {
 
       {/* Status Messages */}
       {submitStatus.type && (
-        <div
-          role="alert"
-          className={`flex items-start gap-3 p-4 rounded-lg ${
-            submitStatus.type === "success"
-              ? "bg-green-50 text-green-800 border border-green-200"
-              : "bg-red-50 text-red-800 border border-red-200"
-          }`}
-        >
-          {submitStatus.type === "success" ? (
-            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
-          ) : (
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
-          )}
-          <p className="font-body text-sm">{submitStatus.message}</p>
-        </div>
+        <AnimatedList delay={300}>
+          <div
+            role="alert"
+            className={`relative flex items-start gap-3 p-4 rounded-lg overflow-hidden ${
+              submitStatus.type === "success"
+                ? "bg-green-50 text-green-800 border border-green-200"
+                : "bg-red-50 text-red-800 border border-red-200"
+            }`}
+          >
+            <BorderBeam
+              size={80}
+              duration={3}
+              colorFrom={submitStatus.type === "success" ? "#10b981" : "#ef4444"}
+              colorTo={submitStatus.type === "success" ? "#34d399" : "#f87171"}
+              borderWidth={2}
+              className="rounded-lg"
+            />
+            {submitStatus.type === "success" ? (
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            ) : (
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            )}
+            <p className="font-body text-sm">{submitStatus.message}</p>
+          </div>
+        </AnimatedList>
       )}
 
       {/* Response Time Hint */}
@@ -258,28 +285,36 @@ export default function ContactForm() {
       </p>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full md:w-auto md:min-w-[200px] bg-brand-slate text-white 
-                   px-8 py-3.5 rounded-lg font-heading font-bold text-lg
-                   hover:bg-opacity-90 focus:ring-2 focus:ring-offset-2 focus:ring-brand-slate
-                   transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed 
-                   flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-        aria-busy={isSubmitting}
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-            <span>Sending...</span>
-          </>
-        ) : (
-          <>
-            <Send className="w-5 h-5" aria-hidden="true" />
-            <span>Send Message</span>
-          </>
-        )}
-      </button>
+      <CoolMode options={{ particleCount: 20 }}>
+        <ShimmerButton
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full md:w-auto md:min-w-[200px] bg-brand-slate text-white 
+                     px-8 py-3.5 rounded-lg font-heading font-bold text-lg
+                     hover:bg-opacity-90 focus:ring-2 focus:ring-offset-2 focus:ring-brand-slate
+                     transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed 
+                     flex items-center justify-center gap-2 shadow-md hover:shadow-lg
+                     border-0"
+          shimmerColor="#FFD700"
+          background="rgb(47, 79, 79)"
+          borderRadius="0.5rem"
+          aria-busy={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              <span>Sending...</span>
+            </>
+          ) : (
+            <>
+              <Send className="w-5 h-5" aria-hidden="true" />
+              <span>Send Message</span>
+            </>
+          )}
+        </ShimmerButton>
+      </CoolMode>
     </form>
+    </>
   );
 }
+

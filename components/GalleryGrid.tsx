@@ -116,3 +116,4 @@ export default function GalleryGrid({ items, onImageClick }: GalleryGridProps) {
   );
 }
 
+

@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { Phone, ArrowRight, Clock, DollarSign, MessageCircle } from "lucide-react";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { Meteors } from "@/components/ui/meteors";
+import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 
 interface PageCTAProps {
   title?: string;
@@ -33,6 +37,8 @@ export default function PageCTA({
         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-brand-yellow/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-white/5 rounded-full" />
+        {/* Meteors Effect */}
+        <Meteors number={10} className="opacity-30" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto text-center">
@@ -40,7 +46,13 @@ export default function PageCTA({
           id="cta-heading"
           className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6"
         >
-          {title}
+          <AnimatedGradientText
+            colorFrom="#FFD700"
+            colorTo="#FFFFFF"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
+          >
+            {title}
+          </AnimatedGradientText>
         </h2>
         
         <p className="font-body text-base sm:text-lg md:text-xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -50,11 +62,19 @@ export default function PageCTA({
         {/* CTA Button */}
         <Link
           href={buttonHref}
-          className="inline-flex items-center justify-center gap-3 bg-brand-yellow text-brand-slate w-full sm:w-auto px-8 py-5 sm:py-4 rounded-xl font-heading font-bold text-lg sm:text-base hover:bg-yellow-400 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-slate"
+          className="relative inline-flex items-center justify-center gap-3 bg-brand-yellow text-brand-slate w-full sm:w-auto px-8 py-5 sm:py-4 rounded-xl font-heading font-bold text-lg sm:text-base hover:bg-yellow-400 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-slate overflow-hidden"
         >
-          <Phone className="w-5 h-5" />
-          {buttonText}
-          <ArrowRight className="w-5 h-5" />
+          <BorderBeam
+            size={120}
+            duration={4}
+            colorFrom="#FFD700"
+            colorTo="#FFFFFF"
+            borderWidth={2}
+            className="rounded-xl"
+          />
+          <Phone className="w-5 h-5 relative z-10" />
+          <span className="relative z-10">{buttonText}</span>
+          <ArrowRight className="w-5 h-5 relative z-10" />
         </Link>
 
         {/* Reassurance Line */}
@@ -78,4 +98,5 @@ export default function PageCTA({
     </section>
   );
 }
+
 
